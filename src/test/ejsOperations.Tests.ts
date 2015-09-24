@@ -69,7 +69,7 @@ describe("ElasticSearch Operations wrapper integration tests ...", function() {
 			})
 	});
 	
-	it('get heatmap/categories should return categories conforming to the contract',function(done){
+	it('get /heatmap/categories should return categories conforming to the contract',function(done){
 		request(url)
 			.get('/heatmap/categories')
 			.end(function(err, res) {
@@ -79,6 +79,27 @@ describe("ElasticSearch Operations wrapper integration tests ...", function() {
 		});
 	});
 	
+	it('post /heatmap/getcategoryscore with valid data should return the document conforming to the contract', function(done) {
+			request(url)
+				.post('/heatmap/categoryscore')
+				.send({
+					division: "test",
+					product: "test",
+					application: "test"
+				})
+				.end(function(err, res) {
+					if (err) throw err;
+					chai.expect(res.body.message).to.be.instanceof(Array).lengthOf(1);
+					chai.expect(res.body.message).to.have.deep.property('[0].fields.division[0]','test');
+					chai.expect(res.body.message).to.have.deep.property('[0].fields.product[0]','test');
+					chai.expect(res.body.message).to.have.deep.property('[0].fields.application[0]','test');
+					//chai.expect(res.body.message).to.have.deep.property('[0].fields.categories.category');
+					//chai.expect(res.body.message).to.have.deep.property('[0].fields.categories.categoryscore');										
+					res.body.should.have.property('isSuccess', true);			
+					done();	
+				});
+	});
+		
 	it('should clean up all the docs created by automated test',function(done){
 		docs.forEach(element => {
 			request(url)
