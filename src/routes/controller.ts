@@ -38,6 +38,25 @@ module routes {
 					this.sendResponse(error.code, error.isSuccess, error.message, response);
 				});
 			});
+			
+			router.post('/heatmap/categoryscore',(request,response) =>{
+				//reusing the same validator
+				var validator = new inputValidator.addProjectRequest();
+
+				if (!validator.isValid(request.body)) {
+					this.sendResponse(400, false, 'Input validation failed', response);
+				}
+				else {
+					var ops = new ejsOperations.Operations();
+					console.log(request.body.division);
+					return ops.getCategoryScore(request.body.division, request.body.product, request.body.application).then((res) => {
+						this.sendResponse(res.code, res.isSuccess, res.message, response);
+					}, (error) => {
+						this.sendResponse(error.code, error.isSuccess, error.message, response);
+					})
+				}
+			});
+			
 			//this is for internal use only
 			router.delete('/heatmap/delete/:id',(request,response) => {
 				var id = request.params.id;

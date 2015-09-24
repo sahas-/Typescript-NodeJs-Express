@@ -105,6 +105,21 @@ module ejsOperations {
 			})
 		}
 		
+		getCategoryScore(division: string,product: string, application: string){
+			return new promise((fulfill,reject) => {
+				let query = new ejsOperations.queries();
+				this.client.search({
+					index: app.indexData.index,
+					type: app.indexData.type,
+					body: query.getCategoryScore(division, product, application)
+				}).then((res) => {
+					fulfill(({ isSuccess: true, code: 200, message: res.hits.hits })); //here categories is the aggregation name from the query
+				},(error) =>{
+					reject(({ isSuccess: false, code: 400, message: "Can't get category score, " + error }));										
+				})
+			})			
+		}
+		
 		private buildBulkIndex(action, data, requestBody) {
 			return (JSON.stringify(action) + '\n' + JSON.stringify(underscore.extend(requestBody, data)));
 		}
