@@ -90,6 +90,29 @@ module ejsOperations {
 			})
 		}
 		
+		getProductHierarchy(){
+			return new promise((fulfill,reject) => {
+				let query = new ejsOperations.queries();
+				let data=[];
+				this.client.search({
+					index: app.indexData.index,
+					type: app.indexData.type,
+					body: query.getProductHierarchy()
+				}).then((res) => {
+					res.aggregations.uniqueDivisions.buckets.forEach(division => {
+						division.uniqueProduct.buckets.forEach(product => {
+							product.uniqueApps.buckets.forEach(app => {
+								data.push({"division":division.key,"product":product.key,"application":app.key});
+							});
+						});
+					});
+					fulfill(({ isSuccess: true, code: 200, message: data }));
+				},(error) =>{
+					reject(({ isSuccess: false, code: 400, message: "Can't get product hierarchy, " + error }));										
+				})
+			})			
+		}
+		
 		getAllCategories(){
 			return new promise((fulfill,reject) => {
 				let query = new ejsOperations.queries();

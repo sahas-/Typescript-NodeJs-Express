@@ -21,9 +21,9 @@ module routes {
 			});
 
 
-			router.get('/heatmap/applications', (request, response) => {
+			router.get('/heatmap/producthierarchy', (request, response) => {
 				var ops = new ejsOperations.Operations();
-				return ops.getUnique("application").then((res) => {
+				return ops.getProductHierarchy().then((res) => {
 					this.sendResponse(res.code, res.isSuccess, res.message, response);
 				}, (error) => {
 					this.sendResponse(error.code, error.isSuccess, error.message, response);

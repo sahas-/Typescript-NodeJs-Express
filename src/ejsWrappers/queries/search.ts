@@ -1,6 +1,35 @@
 module ejsOperations {
   export class queries {
 
+    getProductHierarchy() {
+      let query = {
+        "_source": "false",
+        "fields": ["aggregations"],
+        "aggs": {
+          "uniqueDivisions": {
+            "terms": {
+              "field": "division"
+            },
+            "aggs": {
+              "uniqueProduct": {
+                "terms": {
+                  "field": "product"
+                },
+                "aggs": {
+                  "uniqueApps": {
+                    "terms": {
+                      "field": "application"
+
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+      return (query);
+    }
     getUnique(desc: string) {
       let query = {
         "fields": ["division", "product", "application"],
@@ -73,7 +102,7 @@ module ejsOperations {
           }
         }
       }
-      return(query);
+      return (query);
     }
   }
 }

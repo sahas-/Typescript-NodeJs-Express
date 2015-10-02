@@ -56,15 +56,15 @@ describe("ElasticSearch Operations wrapper integration tests ...", function() {
 		.expect(400, done);
 	});
 
-	it('get /heatmap/applications should return applications conforming to the contract', function(done) {
+	it('get /heatmap/producthierarchy should return product hierarchy conforming to the contract', function(done) {
 		request(url)
-			.get('/heatmap/applications')
+			.get('/heatmap/producthierarchy')
 			.end(function(err, res) {
 				if (err) throw err;
 				chai.expect(res.body.message).to.be.instanceof(Array);
-				chai.expect(res.body.message).to.have.deep.property('[0].fields.division');
-				chai.expect(res.body.message).to.have.deep.property('[0].fields.product');
-				chai.expect(res.body.message).to.have.deep.property('[0].fields.application');
+				chai.expect(res.body.message).to.have.deep.property('[0].division');
+				chai.expect(res.body.message).to.have.deep.property('[0].product');
+				chai.expect(res.body.message).to.have.deep.property('[0].application');
 				done();
 			})
 	});
